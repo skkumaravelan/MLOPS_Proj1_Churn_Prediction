@@ -7,8 +7,13 @@ data = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv')
 data['TotalCharges'] = pd.to_numeric(data['TotalCharges'], errors='coerce')
 data['TotalCharges'].fillna(data['TotalCharges'].mean(), inplace=True)
 
-# Encode categorical variables
-categorical_cols = ['gender', 'Contract', 'PaymentMethod', 'Churn']
+# Drop non-numeric columns (e.g., customerID)
+data = data.drop(['customerID'], axis=1)
+
+# Identify all categorical columns
+categorical_cols = data.select_dtypes(include=['object']).columns.tolist()
+
+# Encode categorical variables (including Churn)
 data = pd.get_dummies(data, columns=categorical_cols, drop_first=True)
 
 # Save preprocessed data
